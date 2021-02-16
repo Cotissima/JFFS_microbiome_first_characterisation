@@ -1,0 +1,257 @@
+#########################################################################################
+## Patterns in the Juan Fernandez fur seal faecal microbiome                           ##
+##                                                                                     ##
+## Constanza Toro-Valdivieso, Frederick Toro, Samuel Stubbs, Eduardo Castro-Nallar,    ##
+## Barbara Blacklaws                                                                   ##
+#########################################################################################
+#########################################################################################
+## Raw sequence processing                                                             ##
+##                                                                                     ##
+## Using qiime2-2019.10                                                                ##
+##                                                                                     ##
+## Constanza Toro-Valdivieso                                                           ##
+##                                                                                     ##
+## Raw sequences available in 
+#########################################################################################
+#########################################################################################
+
+#########################################################################################
+## 1. Manual quality control                                                           ##
+###### FastQC v. 0.11.5................................................................##
+#########################################################################################
+## Download raw sequences, keep sequences separate according to year                   ##
+## Folder names used here: Samples_2017 and Samples_2018                               ##
+
+## Go to directory and make a new folder to store qc output                            ##
+cd PATH/TO/Raw/Sequences/2017
+mkdir fastqc_2017 
+
+## Run FastQC                                                                          ##
+fastqc *fastq.gz
+
+## Move output to folder                                                               ##
+mv Samples_2017/*.zip Samples_2017/*.html fastqc_2017/
+
+## Repeat with samples 2018                                                            ##
+## Note that html files can be found in the project GitHub repository in Fastqc folder ##
+## html files can be directly view in the web browser                                  ##
+#########################################################################################
+
+#########################################################################################
+## 2. Raw sequences processing                                                         ##
+###### Qiime2-2019                                                                     ##
+#########################################################################################
+## Note 1. that raw sequences are already demultiplexed                                ##
+## The fasta.gz files names shoul be in cassava format:                                ##
+## (e.g from 18JFFS1_R1_001.fastq to 18JFFS1_S100_L001_R1_001.fastq.gz)                ##
+##                                                                                     ##
+## Note 2. The qzv files will be included in the folder Qiime/qzv_files folder         ##
+## These files can be viewed directily in https://view.qiime2.org/                     ##
+## If unning this script use the command: qiime tools view file.qzv to view the file   ##
+
+## make and move to a folder to store qiime outputs                                    ##
+mkdir Qiime
+cd Qiime
+
+## Activate Qiime                                                                      ##
+
+## Processing data separately according to year                                        ##
+
+#########################################################################################
+## Import data                                                                         ##
+## Importantion protocol: Casava 1.8 paired-end demultiplexed fastq                    ##
+
+## 2017                                                                                ##
+qiime tools import \
+--type 'SampleData[PairedEndSequencesWithQuality]' \
+--input-path PATH/TO/Samples_2017 \
+--input-format CasavaOneEightSingleLanePerSampleDirFmt \
+--output-path demux-JFFS-2017.qza
+
+## 2018                                                                                 ##
+qiime tools import \
+--type 'SampleData[PairedEndSequencesWithQuality]' \
+--input-path PATH/TO/Samples_2018 \
+--input-format CasavaOneEightSingleLanePerSampleDirFmt \
+--output-path demux-JFFS-2018.qza
+
+#########################################################################################
+## Summarise data                                                                      ##
+## Counts per sample, interactive positional quality plot                              ##
+## Note. For quality is better to look directly to FastQC which produces more robust   ##
+## statistics for quality                                                              ##
+
+## 2017                                                                                ##
+qiime demux summarize \
+--i-data demux-JFFS-2017.qza \
+--o-visualization demux-JFFS-2017.qzv
+
+#2018                                                                                  ##
+qiime demux summarize \
+--i-data demux-JFFS-2018.qza \
+--o-visualization demux-JFFS-2018.qzv
+
+#########################################################################################
+## Denoising and dereplication of paired-end sequences                                 ##
+## It uses the DADA2 plugin                                                            ##
+## The outputs are:                                                                    ##
+## - Feature table                                                                     ##
+## - Representative sequences (ASVs)                                                   ##
+## - Denoising Stats                                                                   ##
+
+## 2017................................................................................##
+## Note. The trimming of 2017 was optimised so that the paired-end sequences from both ##
+## sampling years matche in lenght. The effects of the sequence trimming was checked   ##
+## by alinging both rep seq files using MAFFT plugin in the Geneious software          ##
+qiime dada2 denoise-paired \
+--i-demultiplexed-seqs demux-JFFS-2017.qza \
+--p-trim-left-f 10 \
+--p-trim-left-r 10 \
+--p-trunc-len-f 233 \
+--p-trunc-len-r 233 \
+--o-representative-sequences rep-seqs-2017.qza \
+--o-table table-dada2-2017.qza \
+--o-denoising-stats stats-dada2-2017.qza
+
+## Denoised visualisation file                                                        ##
+qiime metadata tabulate \
+--m-input-file stats-dada2-2017.qza \
+--o-visualization stats-dada2-2017.qzv
+
+## Representative sequences visualisation file                                         ##
+qiime feature-table tabulate-seqs \
+--i-data rep-seqs-2017.qza \
+--o-visualization rep-seqs-2017.qzv 
+
+## Feature table.......................................................................##
+To generate the the feature table summary, metada .tsv file is needed
+qiime feature-table summarize \
+--i-table table-dada2-2017.qza \
+--o-visualization table-dada2-2017.qzv \
+--m-sample-metadata-file JFFS_2017.tsv
+
+
+## 2018                                                                                ##
+qiime dada2 denoise-paired \
+--i-demultiplexed-seqs demux-JFFS-2018.qza \
+--p-trim-left-f 10 \
+--p-trim-left-r 10 \
+--p-trunc-len-f 150 \
+--p-trunc-len-r 150 \
+--o-representative-sequences rep-seqs-2018.qza \
+--o-table table-dada2-2018.qza \
+--o-denoising-stats stats-dada2-2018.qza
+
+## Denoised visualisation file                                                        ##
+qiime metadata tabulate \
+--m-input-file stats-dada2-2018.qza \
+--o-visualization stats-dada2-2018.qzv
+
+## Representative sequences visualisation file                                         ##
+qiime feature-table tabulate-seqs \
+--i-data rep-seqs-2018.qza \
+--o-visualization rep-seqs-2018.qzv
+
+## Feature table.......................................................................##
+qiime feature-table summarize \
+--i-table table-dada2-2018.qza \
+--o-visualization table-dada2-2018.qzv \
+--m-sample-metadata-file JFFS_2018.tsv
+
+#########################################################################################
+## Data merging                                                                        ##
+
+## Merged feature table                                                                ##
+qiime feature-table merge \
+--i-tables table-dada2-2017.qza \
+--i-tables table-dada2-2018.qza \
+--p-overlap-method sum \
+--o-merged-table merged-table.qza
+
+## Merged feature table visualisation                                                  ##
+qiime feature-table summarize \
+--i-table merged-table.qza \
+--o-visualization merged-table.qzv \
+--m-sample-metadata-file JFFS_metadata_qiime2.tsv
+
+## Merged representative sequences                                                     ##
+qiime feature-table merge-seqs \
+--i-data JFFS_2017/rep-seqs-2017.qza \
+--i-data JFFS_2018/rep-seqs-2018.qza \
+--o-merged-data rep-seq-merged.qza
+
+## Merged rep seq                                                                      ##
+qiime feature-table merge-seqs \
+--i-data JFFS_2017/rep-seqs-2017.qza \
+--i-data JFFS_2018/rep-seqs-2018.qza \
+--o-merged-data rep-seq-merged.qza
+
+## Merged rep seq visualisation                                                        ##
+qiime feature-table tabulate-seqs \
+--i-data rep-seq-merged.qza \
+--o-visualization rep-seq-merged.qzv
+
+#########################################################################################
+## Phylogenetic tree                                                                   ##
+## Generation of rooted and unrooted trees                                             ##
+## MAFFT plugin                                                                        ##
+## Note. now view file is provided for the trees                                       ##
+
+qiime phylogeny align-to-tree-mafft-fasttree \
+--i-sequences rep-seq-merged.qza \
+--o-alignment aligned-rep-seqs.qza \
+--o-masked-alignment masked-aligned-rep-seqs.qza \
+--o-tree unrooted-tree.qza \
+--o-rooted-tree rooted-tree.qza
+
+#########################################################################################
+## Taxonomy assigment                                                                  ##
+## Note. The code used to import the Silva132 raw reference into Qiime2 is described   ##
+##  but, only the Qiime imported files are included in this repository (.qza). Those   ##
+## files can be found in Qiime/Silva132/ref folder                                     ##
+## The raw Silva132 files used here can be downloaded from https://www.arb-silva.de    ##
+## Note. reference sequences clustered at 99% sequence similarity were used            ##
+## 
+## Importing raw Silva files                                                           ##
+## Ref rep seq                                                                         ##
+qiime tools import \
+  --type 'FeatureData[Sequence]' \
+  --input-path SILVA_132_QIIME_release/rep_set_aligned/99/99_alignment.fna \
+  --output-path silva_132_99_16S.qza
+
+## Ref taxonomy
+qiime tools import \
+--type 'FeatureData[Taxonomy]' \
+--source-format HeaderlessTSVTaxonomyFormat \
+--input-path SILVA_132_QIIME_release/taxonomy/16S_only/99/raw_taxonomy.txt \
+--output-path ref-taxonomy-Silva.qza
+
+## Extraction of ref reads based on 16S primers used                                   ##
+qiime feature-classifier extract-reads \
+--i-sequences 99_Silva132_otus.qza \
+--p-f-primer GTGCCAGCMGCCGCGGTAA \
+--p-r-primer TAATCTWGGGVHCATCAGG \
+--p-trunc-len 250 \
+--o-reads Silva132-ref-seqs.qza
+
+
+## Training feature classifiers                                                        ##
+qiime feature-classifier fit-classifier-naive-bayes \
+--i-reference-reads Silva132-ref-seqs.qza \
+--i-reference-taxonomy ref-taxonomy-Silva132.qza \
+--o-classifier Silva_classifier.qza
+
+## Taxonomy assigment                                                                  ##
+qiime feature-classifier classify-sklearn \
+--i-classifier Silva132/Silva_classifier.qza \
+--i-reads rep-seq-merged.qza \
+--o-classification taxonomy_silva132.qza
+
+## Taxonomy visualisation                                                              ##
+qiime metadata tabulate \
+--m-input-file taxonomy_silva132.qza \
+--o-visualization taxonomy_silva132.qzv
+
+#########################################################################################
+#########################################################################################
+#########################################################################################
