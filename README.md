@@ -13,35 +13,34 @@ Barbara Blacklaws (1)
 -------------------------------------------------------------------------------------
 The repository contains the following folders:
 
-- Fasqc 
-*These are the compressed html files generated with FastQC to look at the sequence quality:
- 
--- fastqc_2017.tar.xz
--- fastqc_2018.tar.xz
-
-
-- Qiime
-*This folder contains the metada files used in Qiime (one per year and one combing both years of collection), the script, and the folders containing the output files that can be visualised directly in https://view.qiime2.org/
-
--- JFFS_2017.tsv
--- JFFS_2018.tsv
--- JFFS_metadata_qiime2.tsv
--- Qiime_script
--- qzv_files
---- Separate
----- 2017
------ demux-JFFS-2017.qzv
------ rep-seqs-2017.qzv
------ stats-dada2-2017.qzv
------ table-dada2-2017.qzv
----- 2018
------ demux-JFFS-2018.qzv
------ rep-seqs-2018.qzv
------ stats-dada2-2018.qzv
------ table-dada2-2018.qzv
---- Combine
----- merged-table.qzv
----- rep-seq-merged.qzv
----- rooted-tree.qza
----- unrooted-tree.qza
----- taxonomy_silva132.qzv
+- Fasqc   
+*These are the compressed html files generated with FastQC to look at the sequence quality:  
+   
+-- fastqc_2017.tar.xz  
+-- fastqc_2018.tar.xz  
+  
+- Qiime  
+*This folder contains the metada files used in Qiime (one per year and one combing both years of collection), the script, and the folders containing the output files that can be visualised directly in https://view.qiime2.org/  
+  
+-- JFFS_2017.tsv  
+-- JFFS_2018.tsv  
+-- JFFS_metadata_qiime2.tsv  
+-- Qiime_script  
+-- qzv_files  
+--- Separate  
+---- 2017  
+----- demux-JFFS-2017.qzv  
+----- rep-seqs-2017.qzv  
+----- stats-dada2-2017.qzv  
+----- table-dada2-2017.qzv  
+---- 2018  
+----- demux-JFFS-2018.qzv  
+----- rep-seqs-2018.qzv  
+----- stats-dada2-2018.qzv  
+----- table-dada2-2018.qzv  
+--- Combine  
+---- merged-table.qzv  
+---- rep-seq-merged.qzv  
+---- rooted-tree.qza  
+---- unrooted-tree.qza  
+---- taxonomy_silva132.qzv  
