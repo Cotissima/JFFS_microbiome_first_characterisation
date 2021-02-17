@@ -206,9 +206,9 @@ qiime phylogeny align-to-tree-mafft-fasttree \
 
 #########################################################################################
 ## Taxonomy assigment                                                                  ##
-## Note. The code used to import the Silva132 raw reference into Qiime2 is described   ##
-##  but, only the Qiime imported files are included in this repository (.qza). Those   ##
-## files can be found in Qiime/Silva132/ref folder                                     ##
+## Note. This was code includes the importantion of the Silva132 raw reference into 
+## Qiime2, the training of the classifier and the taxonomy assignment.                 ##
+## Only the taxonomy_silva132.qzv was included in this repository.                     ##
 ## The raw Silva132 files used here can be downloaded from https://www.arb-silva.de    ##
 ## Note. reference sequences clustered at 99% sequence similarity were used            ##
 ## 
