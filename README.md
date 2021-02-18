@@ -11,6 +11,8 @@ Barbara Blacklaws (1)
 3. Department of Infectious Disease Epidemiology, London School of Hygiene and Tropical Medicine, UK
 4. Center for Bioinformatics and Integrative Biology, Universidad Andres Bello, Chile
 -------------------------------------------------------------------------------------
+Raw sequences can be accessed via the European Nucleotide Archive (ENA) under the study accession PRJEB365555.
+
 The repository contains the following folders:
 
 - Fasqc   
