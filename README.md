@@ -22,7 +22,7 @@ The repository contains the following folders:
 -- fastqc_2018.tar.xz  
   
 - Qiime  
-*This folder contains the metada files used in Qiime (one per year and one combing both years of collection), the script, and the folders containing the output files that can be visualised directly in https://view.qiime2.org/  
+*This folder contains the metada files used in Qiime (one per year and one combing both years of collection), the script, and the folders containing the output files that can be visualised directly [here](https://view.qiime2.org/)  
   
 -- JFFS_2017.tsv  
 -- JFFS_2018.tsv  
@@ -46,3 +46,9 @@ The repository contains the following folders:
 ---- rooted-tree.qza  
 ---- unrooted-tree.qza  
 ---- taxonomy_silva132.qzv  
+  
+- R_stats
+*This folder contains all the code used in the statistical analysis done in R. There is one folder per step and each of them include and html and a rdm file version.  
+-- JFFS_microbiome_Script1  
+--- JFFS_microbiome_Script1.html
+--- JFFS_microbiome_Script1.rdm
