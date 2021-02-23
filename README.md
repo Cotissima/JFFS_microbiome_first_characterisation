@@ -17,13 +17,11 @@ The repository contains the following folders:
 
 - Fasqc   
 *These are the compressed html files generated with FastQC to look at the sequence quality:  
-   
 -- fastqc_2017.tar.xz  
 -- fastqc_2018.tar.xz  
   
 - Qiime  
 *This folder contains the metada files used in Qiime (one per year and one combing both years of collection), the script, and the folders containing the output files that can be visualised directly [here](https://view.qiime2.org/)  
-  
 -- JFFS_2017.tsv  
 -- JFFS_2018.tsv  
 -- JFFS_metadata_qiime2.tsv  
