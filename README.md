@@ -48,5 +48,5 @@ The repository contains the following folders:
 - R_stats
 *This folder contains all the code used in the statistical analysis done in R. There is one folder per step and each of them include and html and a rdm file version.  
 -- JFFS_microbiome_Script1  
---- JFFS_microbiome_Script1.html
+--- JFFS_microbiome_Script1.html  
 --- JFFS_microbiome_Script1.rdm
